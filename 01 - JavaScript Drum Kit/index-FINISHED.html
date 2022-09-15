@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key AButton" >
+      <kbd class="btn">A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key SButton">
+      <kbd  class="btn">S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key DButton">
+      <kbd class="btn">D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key FButton">
+      <kbd class="btn">F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key GButton">
+      <kbd class="btn">G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key HButton">
+      <kbd class="btn">H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key JButton">
+      <kbd class="btn">J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key KButton">
+      <kbd class="btn">K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key LButton">
+      <kbd class="btn">L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio class="A" data-key="65" src="sounds/clap.wav"></audio>
+  <audio class="S" data-key="83" src="sounds/hihat.wav"></audio>
+  <audio class="D" data-key="68" src="sounds/kick.wav"></audio>
+  <audio class="F" data-key="70" src="sounds/openhat.wav"></audio>
+  <audio class="G" data-key="71" src="sounds/boom.wav"></audio>
+  <audio class="H" data-key="72" src="sounds/ride.wav"></audio>
+  <audio class="J" data-key="74" src="sounds/snare.wav"></audio>
+  <audio class="K" data-key="75" src="sounds/tom.wav"></audio>
+  <audio class="L" data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+  //removeTransition(keyboardEvent)
+  function removeTransition(e) {    
+    if (e.propertyName !== 'transform') return;                                  //Do nothing if not transform(propertyName)  
+    e.target.classList.remove('playing');                                        //remove a class playing from target(key) because it gopt called as transitionend
+  }
+
+
+  //playSouound(keyboardEvent)
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);     //finding match audio using event.keycode
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);         //finding pressed key using event.keycode
+    if (!audio) return;                                                         //Do nothing if audio name not match 
+  
+    key.classList.add('playing');                                                  //add a class to key
+    audio.currentTime = 0;                                                        //audio revert to currentTime when clicked
+    audio.play();                                                                 //play audio 
+  }
+
+
+  //get button name(mouseEvent)
+  function handleClick() {
+    const buttonsInnerHTML = this.innerHTML;                                      //store .btn letter to call in playSound1
+    playSound1(buttonsInnerHTML);                                                 //Execute playSound1
+  }
+
+
+  //playSound1(mouseEvent)
+  function playSound1(currentKey) {
+    const click = document.querySelector("." + currentKey + "Button" )
+    const audio1 = document.querySelector("." + currentKey);                      //finding match audio using event.keycode
+    if (!audio1) return;                                                          //Do nothing if audio1 name not match 
+
+    click.classList.add('playing');                                                  //add a class to key
+    audio1.currentTime = 0;                                                           //audio revert to currentTime when clicked
+    audio1.play();                                                                    //play audio                                                                  
+  }
+
+
+  //keyboardEvent
+  window.addEventListener('keydown', playSound);                                 //if event triggered run playSound function//
+
+
+  //loop through all btn class for transitionend and execute handleClick function
+  const click = Array.from(document.querySelectorAll('.btn'));                    //container for array of .key class to loop and give all a eventlistner
+  click.forEach(btn=> btn.addEventListener('click', handleClick));                //btn got eventlistner (click) if triggered run handleClick function 
+
+
+  //loop through all key class for transitionend Event and execute removeTransition function
+  const keys = Array.from(document.querySelectorAll('.key'));                    //container for array of .key class to loop and give all a eventlistner
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));   // key got eventlistner (transitionend) if triggered run removeTransition function
+
+
+  
+
+       
+</script>
+
+
+</body>
+</html>
